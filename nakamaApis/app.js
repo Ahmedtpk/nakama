@@ -43,7 +43,7 @@ app.get('/getfamilies', async (req, res) =>  {
   }
 })
 
-// get post
+// get posts
 app.get('/getpost/:userId/:familyId', async (req, res) =>  {
   try {
     const userId = req.params.userId
@@ -58,9 +58,16 @@ app.get('/getpost/:userId/:familyId', async (req, res) =>  {
 })
 
 
-app.get('/p/:tagId', function(req, res) {
-  res.send("tagId is set to " + req.params.tagId);
-});
+// create hashed pasword
+// create tokens after loginn and delete after loggout
+// get alle post in spesific family
+// get post for spesific user
+
+// add new user
+// create a post
+// interact with post
+// poke
+// send a message
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
