@@ -1,5 +1,7 @@
 CREATE DATABASE nakama;
 
+--test
+
 CREATE TABLE users (
   id SERIAL,
   userName VARCHAR(128) UNIQUE,
