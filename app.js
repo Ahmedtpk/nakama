@@ -6,8 +6,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// const pool = require('./db');
-const pool = process.env.DATABASE_URL
+const pool = require('./db');
+// const pool = process.env.DATABASE_URL
 
 var app = express();
 
@@ -32,6 +32,9 @@ app.get('/getUsers', async (req, res) =>  {
   } catch (error) {
     console.log(error)
   }
+})
+app.get('/console', async (req, res) => {
+  res.json('testing')
 })
 
 // get alle families
