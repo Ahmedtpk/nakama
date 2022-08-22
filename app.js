@@ -31,6 +31,7 @@ app.get('/getUsers', async (req, res) =>  {
     res.json(allUsers)
   } catch (error) {
     console.log(error)
+    res.json(error)
   }
 })
 app.get('/console', async (req, res) => {
