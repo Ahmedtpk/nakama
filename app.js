@@ -6,12 +6,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// const pool = require('./db');
+const pool = require('./db');
 // const pool = process.env.DATABASE_URL
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.IS_LOCAL ? undefined : { rejectUnauthorized: false },
-});
 
 var app = express();
 
