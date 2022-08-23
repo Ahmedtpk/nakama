@@ -24,15 +24,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+
+const getAllUsers = (request, response) => {
+  pool.query( "SELECT * FROM users;", (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 // get alle users
 app.get('/getUsers', async (req, res) =>  {
-  try {
-    const allUsers = await pool.query("SELECT * from users")
-    res.send(allUsers)
-  } catch (error) {
-    console.log(error)
-    res.json(error)
-  }
+  getAllUsers(req, res)
+  // try {
+  //   const allUsers = await pool.query("SELECT * from users")
+  //   res.send(allUsers)
+  // } catch (error) {
+  //   console.log(error)
+  //   res.json(error)
+  // }
 })
 app.get('/console', async (req, res) => {
   res.json('testing')
