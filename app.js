@@ -28,7 +28,7 @@ app.use('/users', usersRouter);
 app.get('/getUsers', async (req, res) =>  {
   try {
     const allUsers = await pool.query("SELECT * from users")
-    res.json(allUsers)
+    res.send(allUsers)
   } catch (error) {
     console.log(error)
     res.json(error)
