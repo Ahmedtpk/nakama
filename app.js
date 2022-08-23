@@ -1,14 +1,16 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// const bcrypt = require('bcrypt');
+const { getAllUsers } = require('./queries');
+// const { posts } = require('./dummydata');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// const pool = require('./db');
-const {getAllUsers} = require('./db');
-// const pool = process.env.DATABASE_URL
+// var thobiasRouter = require('./routes/thobias');
 
 var app = express();
 
@@ -23,63 +25,49 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// app.use('/thobias', thobiasRouter);
 app.use('/users', usersRouter);
+app.use(cors());
 
-
-// const getAllUsers = async (request, response) => {
-//  await pool.query("SELECT * FROM users;", (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       response.status(200).json(results.rows);
-//     }
-//   );
-// };
-
-// get alle users
-app.get('/getUsers', async (req, res) =>  {
-  getAllUsers(req, res)
-  // try {
-  //   const allUsers = await pool.query("SELECT * from users")
-  //   res.send(allUsers)
-  // } catch (error) {
-  //   console.log(error)
-  //   res.json(error)
-  // }
+app.get('/haha', function (req, res) {
+  res.send('Det funka, gitt')
 })
-// app.get('/console', async (req, res) => {
-//   res.json('testing')
+
+// const hashIt = async(password) => {
+//   const salt = await bcrypt.genSalt();
+//   hashedPassword = await bcrypt.hash(password, salt);
+//   return hashedPassword;
+// }
+
+// app.get('/tokentest', authenticateToken, (req, res) => {
+//   let personalPosts = posts.filter(user => user.user === req.user.name)
+//   res.send(personalPosts);
 // })
 
-// get alle families
-// app.get('/getfamilies', async (req, res) =>  {
-//   try {
-//     const allfamilies = await pool.query("SELECT * from family;")
-//     res.send(allfamilies)
-//   } catch (error) {
-//     console.log(error)
+// app.post('/login', async function(req, res) {
+//   checkPassword(req, res);
+// })
+
+app.post('/getAllUsers', function(req, res) {
+  getAllUsers(req, res);
+})
+
+// app.post('/createPassword', function(req, res) {
+//   createPassword(req, res);
+// })
+
+
+
+
+
+// app.post('/body', function (req, res) {
+//   console.log(req.body)
+//   if(req.body.reverse){
+//     res.send(`Haha, bakvendt: ${req.body.data.split("").reverse().join("")}`)
+//   } else {
+//     res.send(`Dette er bodyen din: ${req.body.data}`)
 //   }
 // })
-
-// // get post
-// app.get('/getpost/:userId/:familyId', async (req, res) =>  {
-//   try {
-//     const userId = req.params.userId
-//     const familyId = req.params.familyId
-//     // res.send("tagId is set to " + userId);
-//     // console.log(userId)
-//     const getPost = await pool.query("SELECT * from posts WHERE user_id = ($1) and family_id = ($2)", [userId, familyId])
-//     res.json(getPost)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
-
-
-// app.get('/p/:tagId', function(req, res) {
-//   res.send("tagId is set to " + req.params.tagId);
-// });
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -95,5 +83,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+require("dotenv").config();
 
 module.exports = app;
