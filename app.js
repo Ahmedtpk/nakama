@@ -26,7 +26,7 @@ app.use('/users', usersRouter);
 
 
 const getAllUsers = (request, response) => {
-  pool.query( "SELECT * FROM users;", (error, results) => {
+  pool.query("SELECT * FROM users;", (error, results) => {
       if (error) {
         throw error;
       }
