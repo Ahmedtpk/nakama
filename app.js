@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const {getAllUsers} = require('./db');
+const pool = require('./db');
 // const pool = process.env.DATABASE_URL
 
 var app = express();
@@ -25,15 +25,15 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-// const getAllUsers = (request, response) => {
-//   pool.query("SELECT * FROM users;", (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       response.status(200).json(results.rows);
-//     }
-//   );
-// };
+const getAllUsers = (request, response) => {
+  pool.query("SELECT * FROM users;", (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
 
 // get alle users
 app.get('/getUsers', async (req, res) =>  {
@@ -46,38 +46,38 @@ app.get('/getUsers', async (req, res) =>  {
   //   res.json(error)
   // }
 })
-// app.get('/console', async (req, res) => {
-//   res.json('testing')
-// })
+app.get('/console', async (req, res) => {
+  res.json('testing')
+})
 
-// // get alle families
-// app.get('/getfamilies', async (req, res) =>  {
-//   try {
-//     const allfamilies = await pool.query("SELECT * from family")
-//     res.json(allfamilies)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
+// get alle families
+app.get('/getfamilies', async (req, res) =>  {
+  try {
+    const allfamilies = await pool.query("SELECT * from family")
+    res.json(allfamilies)
+  } catch (error) {
+    console.log(error)
+  }
+})
 
-// // get post
-// app.get('/getpost/:userId/:familyId', async (req, res) =>  {
-//   try {
-//     const userId = req.params.userId
-//     const familyId = req.params.familyId
-//     // res.send("tagId is set to " + userId);
-//     // console.log(userId)
-//     const getPost = await pool.query("SELECT * from posts WHERE user_id = ($1) and family_id = ($2)", [userId, familyId])
-//     res.json(getPost)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
+// get post
+app.get('/getpost/:userId/:familyId', async (req, res) =>  {
+  try {
+    const userId = req.params.userId
+    const familyId = req.params.familyId
+    // res.send("tagId is set to " + userId);
+    // console.log(userId)
+    const getPost = await pool.query("SELECT * from posts WHERE user_id = ($1) and family_id = ($2)", [userId, familyId])
+    res.json(getPost)
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 
-// app.get('/p/:tagId', function(req, res) {
-//   res.send("tagId is set to " + req.params.tagId);
-// });
+app.get('/p/:tagId', function(req, res) {
+  res.send("tagId is set to " + req.params.tagId);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -94,6 +94,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-require("dotenv").config();
 
 module.exports = app;
