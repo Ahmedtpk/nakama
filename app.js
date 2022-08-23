@@ -46,53 +46,53 @@ app.get('/getUsers', async (req, res) =>  {
   //   res.json(error)
   // }
 })
-app.get('/console', async (req, res) => {
-  res.json('testing')
-})
+// app.get('/console', async (req, res) => {
+//   res.json('testing')
+// })
 
-// get alle families
-app.get('/getfamilies', async (req, res) =>  {
-  try {
-    const allfamilies = await pool.query("SELECT * from family")
-    res.json(allfamilies)
-  } catch (error) {
-    console.log(error)
-  }
-})
+// // get alle families
+// app.get('/getfamilies', async (req, res) =>  {
+//   try {
+//     const allfamilies = await pool.query("SELECT * from family")
+//     res.json(allfamilies)
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
 
-// get post
-app.get('/getpost/:userId/:familyId', async (req, res) =>  {
-  try {
-    const userId = req.params.userId
-    const familyId = req.params.familyId
-    // res.send("tagId is set to " + userId);
-    // console.log(userId)
-    const getPost = await pool.query("SELECT * from posts WHERE user_id = ($1) and family_id = ($2)", [userId, familyId])
-    res.json(getPost)
-  } catch (error) {
-    console.log(error)
-  }
-})
+// // get post
+// app.get('/getpost/:userId/:familyId', async (req, res) =>  {
+//   try {
+//     const userId = req.params.userId
+//     const familyId = req.params.familyId
+//     // res.send("tagId is set to " + userId);
+//     // console.log(userId)
+//     const getPost = await pool.query("SELECT * from posts WHERE user_id = ($1) and family_id = ($2)", [userId, familyId])
+//     res.json(getPost)
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
 
 
-app.get('/p/:tagId', function(req, res) {
-  res.send("tagId is set to " + req.params.tagId);
-});
+// app.get('/p/:tagId', function(req, res) {
+//   res.send("tagId is set to " + req.params.tagId);
+// });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// // error handler
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
 
 module.exports = app;
