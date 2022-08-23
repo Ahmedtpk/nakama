@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const pool = require('./db');
+const {getAllUsers} = require('./db');
 // const pool = process.env.DATABASE_URL
 
 var app = express();
@@ -25,15 +25,15 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-const getAllUsers = (request, response) => {
-  pool.query("SELECT * FROM users;", (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
-    }
-  );
-};
+// const getAllUsers = (request, response) => {
+//   pool.query("SELECT * FROM users;", (error, results) => {
+//       if (error) {
+//         throw error;
+//       }
+//       response.status(200).json(results.rows);
+//     }
+//   );
+// };
 
 // get alle users
 app.get('/getUsers', async (req, res) =>  {
