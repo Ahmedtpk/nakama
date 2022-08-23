@@ -48,7 +48,7 @@ app.get('/haha', function (req, res) {
 //   checkPassword(req, res);
 // })
 
-app.post('/getAllUsers', function(req, res) {
+app.get('/getAllUsers', function(req, res) {
   getAllUsers(req, res);
 })
 
