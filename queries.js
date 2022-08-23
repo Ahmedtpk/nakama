@@ -7,9 +7,9 @@ const { Client } = require('pg');
 
 const client = new Client({
   host: process.env.HOST,
-  user: process.env.DBUSER,
-  port: process.env.DBPORT,
-  password: process.env.DBPASSWORD,
+  user: process.env.USER,
+  port: process.env.PORT,
+  password: process.env.PASSWORD,
   database: process.env.DATABASE,
   ssl: {
     rejectUnauthorized: false
