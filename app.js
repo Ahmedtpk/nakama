@@ -25,8 +25,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-const getAllUsers = (request, response) => {
-  pool.query("SELECT * FROM users;", (error, results) => {
+const getAllUsers = async (request, response) => {
+ await pool.query("SELECT * FROM users;", (error, results) => {
       if (error) {
         throw error;
       }
