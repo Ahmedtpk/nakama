@@ -18,6 +18,15 @@ const client = new Client({
 
 
 client.connect();
+// const client = new Client({
+//   user: "postgres",
+//   password: "1999",
+//   database: "nakama",
+//   host: "localhost",
+//   port: 5432
+// })
+
+// client.connect();
 
 const getAllUsers = (request, response) => {
   client.query(
@@ -30,6 +39,95 @@ const getAllUsers = (request, response) => {
     }
   );
 };
+
+const getAllFamiles = (request, response) => {
+  client.query(
+    "SELECT * FROM family;",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
+const getAllPosts = (request, response) => {
+  client.query(
+    "SELECT * FROM posts;",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
+const createUser = (username, password, hashedPassword, req, res) => {
+  client.query(
+    "INSERT INTO users (userName, password, hashedPasword ) VALUES ($1, $2, $3);", [username, password, hashedPassword],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200);
+    }
+  );
+};
+
+const loginplz = (username, password, hashedPassword, req, res) => {
+  console.log(username)
+
+    client.query(
+    "SELECT * FROM users;",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      results.rows.forEach(element => {
+        if (element.username == username) {
+          if (element.password == password){
+            res.end(['riktig password, du er nå looget inn med ' + element.id])
+          } else res.end('feil password')
+        }
+      });
+      // console.log(results.rows)
+    }
+  );
+
+};
+const createPost = (userId, family_id, title, description, meatinTime, postTime) => {
+  client.query("INSERT INTO posts (user_id, family_id, title, description, meating_time, post_time) VALUES ($1, $2, $3, $4, $5, $6);", [ userId, family_id, title, description, meatinTime, postTime],
+   (error, results) => {
+    if (error) {
+      throw error
+    } else return
+  })
+}
+
+const validateUserLogin = (noe) => {
+  // check if pasword and user name exist
+  console.log(noe)
+  // client.query(
+  //   "SELECT * FROM users;",
+  //   (error, results) => {
+  //     if (error) {
+  //       throw error;
+  //     }
+  //     results.rows.forEach(element => {
+  //       if (element.username === username) {
+  //         if (element.password === pasword){
+  //           response.send('riktig password')
+  //         }
+  //       } else (response.send('wrong username or password'))
+  //     });
+  //     // console.log(results.rows)
+  //   }
+  // );
+};
+
+
 
 // const hashPassword = async(password) => {
 //   const salt = await bcrypt.genSalt();
@@ -105,5 +203,11 @@ const getAllUsers = (request, response) => {
 // }
 
 module.exports = { 
-  getAllUsers
+  getAllUsers,
+  getAllFamiles,
+  createUser,
+  validateUserLogin,
+  loginplz,
+  createPost,
+  getAllPosts
 };

@@ -5,7 +5,7 @@ const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // const bcrypt = require('bcrypt');
-const { getAllUsers } = require('./queries');
+const { getAllUsers, getAllFamiles, getAllPosts , createUser, loginplz, createPost } = require('./queries');
 // const { posts } = require('./dummydata');
 
 var indexRouter = require('./routes/index');
@@ -49,7 +49,68 @@ app.get('/haha', function (req, res) {
 // })
 
 app.get('/getAllUsers', function(req, res) {
-  getAllUsers(req, res);
+  getAllUsers(req, res)
+  // try {
+  //   getAllUsers(req, res)
+  // } catch (error) {
+  //   console.log(error)
+  // }
+})
+
+app.get('/getFamiles', function(req, res) {
+  try {
+    getAllFamiles(req, res);
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+app.get('/getAllPosts', function(req, res) {
+  try {
+    getAllPosts(req, res);
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// app.post('/login', function(req, res) {
+//   console.log(req)
+//   console.log(res)
+
+// })
+
+app.post('/createUserName', function (req, res) {  
+  const username = req.body.username
+  const password = req.body.password
+  const hashedPassword = req.body.password
+  createUser(username,  password, hashedPassword, req, res)
+  
+  // console.log(response);  
+  res.end('user name and password sendt');  
+})
+
+app.post('/loginplz', async function (req, res) {  
+  const username = req.body.username
+  const password = req.body.password
+  const hashedPassword = req.body.password
+  try {
+   await loginplz(username,  password, hashedPassword, req, res)
+  } catch (error) {
+    console.log(error)
+  }  
+})
+
+// dett funker ikke
+
+app.post('/createPost',  function (req, res) { 
+  const userId = req.body.userId
+  const familyId = req.body.familyId
+  const title = req.body.title
+  const description = req.body.description
+  const meatinTime = req.body.meatinTime
+  const postTime = req.body.postTime
+  createPost(userId, familyId, title , description, meatinTime, postTime)
+  res.end('post er lagt ut')
 })
 
 // app.post('/createPassword', function(req, res) {
