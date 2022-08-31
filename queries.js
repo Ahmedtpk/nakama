@@ -64,6 +64,18 @@ const getAllPosts = (request, response) => {
   );
 };
 
+const deleteUser = (request, response) => {
+  client.query(
+    "DELETE FROM users WHERE user_id = 2; SELECT * FROM users;",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 const createUser = (username, password, hashedPassword, req, res) => {
   client.query(
     "INSERT INTO users (userName, password, hashedPasword ) VALUES ($1, $2, $3);", [username, password, hashedPassword],
@@ -209,5 +221,6 @@ module.exports = {
   validateUserLogin,
   loginplz,
   createPost,
-  getAllPosts
+  getAllPosts,
+  deleteUser
 };
