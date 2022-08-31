@@ -66,7 +66,7 @@ const getAllPosts = (request, response) => {
 
 const deleteUser = (request, response) => {
   client.query(
-    "DELETE FROM users WHERE user_id = 2; SELECT * FROM users;",
+    "DELETE FROM users WHERE user_id = 2;",
     (error, results) => {
       if (error) {
         throw error;
