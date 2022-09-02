@@ -5,7 +5,7 @@ const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // const bcrypt = require('bcrypt');
-const { getAllUsers, getAllFamiles, getAllPosts , createUser, loginplz, createPost, deleteUser, getPostById } = require('./queries');
+const { getAllUsers, getAllFamiles, getAllPosts , createUser, loginplz, createPost, deleteUser, getPostById, getFamilesById } = require('./queries');
 // const { posts } = require('./dummydata');
 
 var indexRouter = require('./routes/index');
@@ -75,9 +75,16 @@ app.get('/getAllPosts', function(req, res) {
 
 // get a post by ID ------------------
 app.get('/getpost/:postID/', async (req, res) =>  {
-  console.log('it works')
   try {
     getPostById(req, res)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+app.get('/getfamily/:familyId/', async (req, res) =>  {
+  try {
+    getFamilesById(req, res)
   } catch (error) {
     console.log(error)
   }

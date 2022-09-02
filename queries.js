@@ -81,6 +81,20 @@ const getPostById = (request, response) => {
   );
 };
 
+const getFamilesById = (request, response) => {
+  const familyId = request.params.familyId
+  console.log(familyId)
+  client.query(
+    "SELECT * FROM family WHERE id = ($1);", [familyId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 const deleteUser = (request, response) => {
   client.query(
     "DELETE FROM users WHERE user_id = 2;",
@@ -240,5 +254,6 @@ module.exports = {
   createPost,
   getAllPosts,
   deleteUser,
-  getPostById
+  getPostById,
+  getFamilesById
 };
