@@ -18,6 +18,8 @@ const client = new Client({
 
 
 client.connect();
+
+// -------------------------------------------
 // const client = new Client({
 //   user: "postgres",
 //   password: "1999",
@@ -27,9 +29,10 @@ client.connect();
 // })
 
 // client.connect();
+// -------------------------------------------
 
-const getAllUsers = (request, response) => {
-  client.query(
+const getAllUsers = async (request, response) => {
+  await client.query(
     "SELECT * FROM users;",
     (error, results) => {
       if (error) {
@@ -55,6 +58,20 @@ const getAllFamiles = (request, response) => {
 const getAllPosts = (request, response) => {
   client.query(
     "SELECT * FROM posts;",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
+const getPostById = (request, response) => {
+  const postID = request.params.postID
+  console.log(postID)
+  client.query(
+    "SELECT * FROM posts WHERE id = ($1);", [postID],
     (error, results) => {
       if (error) {
         throw error;
@@ -222,5 +239,6 @@ module.exports = {
   loginplz,
   createPost,
   getAllPosts,
-  deleteUser
+  deleteUser,
+  getPostById
 };
