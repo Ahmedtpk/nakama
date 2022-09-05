@@ -5,7 +5,7 @@ const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // const bcrypt = require('bcrypt');
-const { getAllUsers, getAllFamiles, getAllPosts , createUser, loginplz, createPost, deleteUser, getPostById, getFamilesById } = require('./queries');
+const { getAllUsers, getAllFamiles, getAllPosts , createUser, login, createPost, deleteUser, getPostById, getFamilesById } = require('./queries');
 // const { posts } = require('./dummydata');
 
 var indexRouter = require('./routes/index');
@@ -104,22 +104,21 @@ app.get('/deleteUser', function(req, res) {
 
 // })
 
-app.post('/createUserName', function (req, res) {  
+app.post('/createUserName', async function (req, res) {  
   const username = req.body.username
   const password = req.body.password
-  const hashedPassword = req.body.password
-  createUser(username,  password, hashedPassword, req, res)
-  
-  // console.log(response);  
-  res.end('user name and password sendt');  
+  try {
+    await createUser(username,  password, req, res)
+  } catch (error) {
+    res.status(401).send('faild to create a user')
+  } 
 })
 
-app.post('/loginplz', async function (req, res) {  
+app.post('/users/login', async function (req, res) {  
   const username = req.body.username
   const password = req.body.password
-  const hashedPassword = req.body.password
   try {
-   await loginplz(username,  password, hashedPassword, req, res)
+   await login(username, password, req, res)
   } catch (error) {
     console.log(error)
   }  

@@ -1,10 +1,10 @@
 // const API_URL = 'localhost:3000/users';
 require("dotenv").config();
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 // const jwt = require("jsonwebtoken");
 
 const { Client } = require('pg');
-
+// ------------------------------------
 const client = new Client({
   host: process.env.HOST,
   user: process.env.USER,
@@ -15,9 +15,8 @@ const client = new Client({
     rejectUnauthorized: false
   }
 });
-
-
 client.connect();
+// ------------------------------------
 
 // -------------------------------------------
 // const client = new Client({
@@ -107,34 +106,67 @@ const deleteUser = (request, response) => {
   );
 };
 
-const createUser = (username, password, hashedPassword, req, res) => {
-  client.query(
-    "INSERT INTO users (userName, password, hashedPasword ) VALUES ($1, $2, $3);", [username, password, hashedPassword],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200);
-    }
-  );
+const createUser = async (username, password, req, res) => {
+  // vi har en feil er!!!!! hvis man bruker samme brukernavn så vil den returnere du har
+  // laget username men den vil ikke lage en username. firdi hver user name må være unik
+  try {
+    const salt = await bcrypt.genSalt()
+    hashedPassword = await bcrypt.hash(password, salt)
+    console.log(salt)
+    console.log(hashedPassword)
+    await client.query("INSERT INTO users (userName, password, hashedPasword ) VALUES ($1, $2, $3);", [username, password, hashedPassword] , () => {
+      res.send('you have created a user name')
+    });
+  } catch {
+    res.status(500).send('could not creat a user, try another username')
+  }
 };
 
-const loginplz = (username, password, hashedPassword, req, res) => {
-  console.log(username)
+const login = (username, password, req, res) => {
+  // console.log(username)
 
-    client.query(
-    "SELECT * FROM users;",
-    (error, results) => {
+    client.query("SELECT * FROM users;", async (error, results) => {
       if (error) {
         throw error;
       }
-      results.rows.forEach(element => {
-        if (element.username == username) {
-          if (element.password == password){
-            res.end(['riktig password, du er nå looget inn med ' + element.id])
-          } else res.end('feil password')
-        }
+      //-----------------
+      results.rows.forEach( async element => {
+        if(element.username == username) {
+          try {
+            console.log(element.hashedpasword)
+            if (await bcrypt.compare(password, element.hashedpasword)) {
+              res.send('Success')
+            } else {
+              res.send('Wrong password')
+            }
+          } catch (error) {
+            return res.status(400).send()
+          }
+        } 
       });
+      // const user = results.rows.find(user => user.id = 11 )
+      // if (user == null) {
+        
+      // }
+      // try {
+      //   console.log('found user')
+      //   // console.log(user)
+      //   if (await bcrypt.compare(password, user.hashedpasword)) {
+      //     res.send('Success')
+      //   } else {
+      //     res.send('Not Allowed')
+      //   }
+      // } catch (error) {
+      //   return res.status(400).send()
+      // }
+      // res.send('user found')
+      // results.rows.forEach(element => {
+      //   if (element.username == username) {
+      //     if (element.password == password){
+      //       res.end('riktig password, du er nå looget inn med ' + element.id)
+      //     } else res.end('feil password')
+      //   }
+      // });
       // console.log(results.rows)
     }
   );
@@ -250,7 +282,7 @@ module.exports = {
   getAllFamiles,
   createUser,
   validateUserLogin,
-  loginplz,
+  login,
   createPost,
   getAllPosts,
   deleteUser,
