@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 // const jwt = require("jsonwebtoken");
 
 const { Client } = require('pg');
-// ------------------------------------
 const client = new Client({
   host: process.env.HOST,
   user: process.env.USER,
@@ -16,7 +15,6 @@ const client = new Client({
   }
 });
 client.connect();
-// ------------------------------------
 
 // -------------------------------------------
 // const client = new Client({
